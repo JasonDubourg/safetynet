@@ -10,9 +10,12 @@ import com.safetynet.api.dao.MedicalRecordDaoImpl;
 import com.safetynet.api.dao.PersonDaoImpl;
 import com.safetynet.api.dto.FirestationCoveragePerson;
 import com.safetynet.api.dto.FirestationCoveragePersonWithCounting;
+import com.safetynet.api.dto.FirestationPersonAtAddress;
 import com.safetynet.api.dto.FirestationNumber;
 import com.safetynet.api.dto.PersonInfoByAddress;
+import com.safetynet.api.dto.PersonInfoByStation;
 import com.safetynet.api.dto.PersonsInfoWithFirestation;
+import com.safetynet.api.model.Firestation;
 import com.safetynet.api.model.Person;
 import com.safetynet.api.util.CalculAge;
 import com.safetynet.api.util.DefineMajority;
@@ -34,7 +37,7 @@ public class FirestationService {
 		return personDaoImpl.findPersonsNumberPhonesServedByFirestation(firestationsAddress); 
 	}
 	
-	public FirestationCoveragePersonWithCounting getFirestationCoveragePerson(String station){
+	public FirestationCoveragePersonWithCounting getFirestationWithPersonInfo(String station){
 		List <String> firestationsAddress = firestationDaoImpl.findFirestationByNumberStation(station);
 		List <FirestationCoveragePerson> personsList = new ArrayList<>(); 
 		FirestationCoveragePersonWithCounting firestationCoveragePersonWithCounting = new FirestationCoveragePersonWithCounting();
@@ -56,6 +59,32 @@ public class FirestationService {
 			}
 		}
 		return firestationCoveragePersonWithCounting;
+	}
+	
+	public List <FirestationPersonAtAddress> getFirestationCoveragePerson(List<String> stations){
+		List <FirestationPersonAtAddress> firestationPersonAtAddress = new ArrayList<FirestationPersonAtAddress>();
+		for (String station : stations) {
+			List<Firestation> listFirestationAddress = firestationDaoImpl.findFirestationByStation(station);
+			for (Firestation firestation : listFirestationAddress) {
+				FirestationPersonAtAddress firestationPerson = new FirestationPersonAtAddress();
+				PersonInfoByStation personInfo = new PersonInfoByStation();
+				List <Person> personByAddress = personDaoImpl.findPersonsByAddress(firestation.getAddress());
+				for(Person person : personByAddress) {
+					personInfo.setAddress(person.getAddress());
+					personInfo.setFirstName(person.getFirstName());
+					personInfo.setLastName(person.getLastName());
+					personInfo.setPhone(person.getPhone());
+					personInfo.setMedications(medicalRecordDaoImpl.findMedicationsByName(person.getFirstName(), person.getLastName())); 
+					personInfo.setAllergies(medicalRecordDaoImpl.findAllergiesByName(person.getFirstName(), person.getLastName()));
+					personInfo.setAge(CalculAge.calculAgeWithBirthdate(medicalRecordDaoImpl.findBirthdateByName(person.getFirstName(), person.getLastName())));
+				}
+				firestationPerson.setAddress(firestation.getAddress());
+				firestationPerson.setStation(station);
+				firestationPerson.getListPersonInfo().add(personInfo);
+				firestationPersonAtAddress.add(firestationPerson);
+			}
+		}
+		return firestationPersonAtAddress;
 	}
 	
 	public PersonsInfoWithFirestation getListPersonsAndNumberFirestationByAddress(String address) {

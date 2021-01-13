@@ -13,4 +13,8 @@ public interface IPersonDao  {
 	public List<Person>findPersonsServedByFirestationAddress(List<String> addressFirestation);
 	public List<Person>findPersonsByAddress(String address);
 	public boolean findMinorInList(List<FamilyMembers> familyMembers);
+	
+	public boolean createPerson(Person person);
+	public boolean updatePerson(Person person);
+	public boolean deletePerson(Person person);
 }

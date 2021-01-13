@@ -16,6 +16,27 @@ public class PersonDaoImpl implements IPersonDao {
 	DataRepository dataRepository;
 
 	@Override
+	public boolean createPerson(Person person) {
+		//Ajout de la nouvelle personne en mémoire
+		dataRepository.database.getPersons().add(person);
+		//Commit les changements pour les appliquer sur le fichier json => écriture
+		dataRepository.commit();
+		return true;
+	}
+
+	@Override
+	public boolean updatePerson(Person person) {
+		
+		return false;
+	}
+
+	@Override
+	public boolean deletePerson(Person person) {
+		
+		return false;
+	}
+	
+	@Override
 	public List<Person> findAll() {
 		 return dataRepository.database.getPersons();
 	}
@@ -82,5 +103,10 @@ public class PersonDaoImpl implements IPersonDao {
 		}
 		return isMinor;
 	}
+
+
+
+	
+	
 	
 }

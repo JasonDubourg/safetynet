@@ -14,6 +14,7 @@ import com.safetynet.api.dto.ChildByAddress;
 import com.safetynet.api.dto.FamilyMembers;
 import com.safetynet.api.dto.ParentByAddress;
 import com.safetynet.api.dto.PersonInfo;
+import com.safetynet.api.exceptions.DataAlreadyExistException;
 import com.safetynet.api.model.Person;
 import com.safetynet.api.util.CalculAge;
 import com.safetynet.api.util.DefineMajority;
@@ -93,5 +94,15 @@ public class PersonService {
 		childAndParentsByAddress.setChildByAddress(childByAddress);
 		childAndParentsByAddress.setParentByAddress(childParents);
 		return childAndParentsByAddress;
+	}
+	
+	public boolean createPerson(Person person) {
+		//Vérifier que la personne n'existe pas en repo.
+		if(!personDaoImpl.findAll().contains(person)) {
+			personDaoImpl.createPerson(person);
+			return true;
+		} else {
+			throw new DataAlreadyExistException("La personne " + person.getFirstName() + " " + person.getLastName() + " existe déjà !!");
+		}
 	}
 }

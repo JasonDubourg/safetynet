@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.safetynet.api.dto.FirestationCoveragePersonWithCounting;
+import com.safetynet.api.dto.FirestationPersonAtAddress;
 import com.safetynet.api.dto.PersonsInfoWithFirestation;
 import com.safetynet.api.service.FirestationService;
 
@@ -34,7 +35,7 @@ public class FirestationController {
 	@GetMapping(value="/firestation")
 	@ResponseStatus(HttpStatus.OK)
 	public FirestationCoveragePersonWithCounting getListFirestationCoveragePerson(@RequestParam("stationNumber") String station) {
-		return firestationSerivce.getFirestationCoveragePerson(station); 
+		return firestationSerivce.getFirestationWithPersonInfo(station); 
 	}
 	
 	@GetMapping(value="/fire")
@@ -42,6 +43,13 @@ public class FirestationController {
 	public PersonsInfoWithFirestation getListPersonsAndNumberFirestationByAddress(@RequestParam("address") String address) {
 		return firestationSerivce.getListPersonsAndNumberFirestationByAddress(address); 
 	}
+	
+	@GetMapping(value="/flood/stations")
+	@ResponseStatus(HttpStatus.OK)
+	public List <FirestationPersonAtAddress> getListHomesByStation(@RequestParam("stationNumber") List <String> stations) {
+		return firestationSerivce.getFirestationCoveragePerson(stations); 
+	}
+	
 	
 	@PostMapping(value="/firestationAdd")
 	public String postPerson() {

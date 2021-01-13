@@ -9,5 +9,6 @@ public interface IFirestationDao {
 	public List<Firestation>findAll();
 	public List<String>findFirestationByNumberStation(String station);
 	public List<String> findFirestationNumberbyAddress(String address);
+	List<Firestation> findFirestationByStation(String station);
 	
 }

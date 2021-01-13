@@ -26,6 +26,5 @@ public class FirestationCoveragePersonWithCounting {
 	public void setCptChild(int cptChild) {
 		this.cptChild = cptChild;
 	}
-	
-	
+
 }

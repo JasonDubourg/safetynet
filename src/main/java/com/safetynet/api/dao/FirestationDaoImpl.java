@@ -30,6 +30,18 @@ public class FirestationDaoImpl implements IFirestationDao {
 		} 
 		return firestationsAddress; 
 	}
+	
+	@Override
+	public List<Firestation> findFirestationByStation(String station) {	
+		List<Firestation> firestations = new ArrayList<>(); 
+		List<Firestation> firestationsRepo = dataRepository.database.getFirestations();
+		for (Firestation firestation : firestationsRepo) {
+			if(station.equals(firestation.getStation())) {
+				firestations.add(firestation); 
+			}
+		} 
+		return firestations; 
+	}
 
 	@Override
 	public List<String> findFirestationNumberbyAddress(String address) {
