@@ -63,7 +63,7 @@ public class PersonController {
 	@DeleteMapping (value="/person")
 	@ResponseStatus(HttpStatus.RESET_CONTENT)
 	public void deletePerson(@RequestBody @Valid Person person) {
-
+		personService.deletePerson(person);
 	}
 
 }

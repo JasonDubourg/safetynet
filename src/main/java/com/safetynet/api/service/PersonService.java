@@ -15,6 +15,7 @@ import com.safetynet.api.dto.FamilyMembers;
 import com.safetynet.api.dto.ParentByAddress;
 import com.safetynet.api.dto.PersonInfo;
 import com.safetynet.api.exceptions.DataAlreadyExistException;
+import com.safetynet.api.exceptions.DataNotFoundException;
 import com.safetynet.api.model.Person;
 import com.safetynet.api.util.CalculAge;
 import com.safetynet.api.util.DefineMajority;
@@ -104,5 +105,21 @@ public class PersonService {
 		} else {
 			throw new DataAlreadyExistException("La personne " + person.getFirstName() + " " + person.getLastName() + " existe déjà !!");
 		}
+	}
+	
+	public boolean deletePerson(Person person) {
+		//Vérifier que la personne existe en BDD
+		if(!personDaoImpl.deletePerson(person)) {
+			throw new DataNotFoundException("La personne " + person.getFirstName() + " " + person.getLastName() + " n'existe pas ! ");
+		} 
+		return true;
+	}
+	
+	public boolean updatePerson(Person person) {
+		//Vérifier que la personne existe en BDD
+		if(!personDaoImpl.updatePerson(person)) {
+			throw new DataNotFoundException("La personne " + person.getFirstName() + " " + person.getLastName() + " n'existe pas ! ");
+		}
+		return true;
 	}
 }
