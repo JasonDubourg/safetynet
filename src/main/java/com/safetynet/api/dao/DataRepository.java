@@ -67,7 +67,6 @@ public class DataRepository {
 			}
 		}
 	}
-	
 		// Autorisation de modifier la velur de commit
 		public void setCommit(boolean commit) {
 			this.commit = commit;

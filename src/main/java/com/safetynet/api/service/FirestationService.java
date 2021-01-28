@@ -2,6 +2,9 @@ package com.safetynet.api.service;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +18,7 @@ import com.safetynet.api.dto.FirestationNumber;
 import com.safetynet.api.dto.PersonInfoByAddress;
 import com.safetynet.api.dto.PersonInfoByStation;
 import com.safetynet.api.dto.PersonsInfoWithFirestation;
+import com.safetynet.api.exceptions.DataAlreadyExistException;
 import com.safetynet.api.model.Firestation;
 import com.safetynet.api.model.Person;
 import com.safetynet.api.util.CalculAge;
@@ -108,5 +112,24 @@ public class FirestationService {
 		personsInfoWithFirestation.setPersonInfoByAddress(personsList);
 		personsInfoWithFirestation.setFirestationNumber(station);
 		return personsInfoWithFirestation;
+	}
+
+	public boolean createFirestation(@Valid Firestation firestation) {
+		if(!firestationDaoImpl.findAll().contains(firestation) ) {
+			firestationDaoImpl.createFirestation(firestation);
+			return true;
+		} else {
+			throw new DataAlreadyExistException("La station" + firestation.toString() + " existe déjà");
+		}
+	}
+
+	public void updateFirestation(@Valid Firestation firestation) {
+	
+		
+	}
+
+	public void deleteFirestation(@Valid Firestation firestation) {
+		
+		
 	}
 }

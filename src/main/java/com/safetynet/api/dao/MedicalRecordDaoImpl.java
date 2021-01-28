@@ -3,6 +3,8 @@ package com.safetynet.api.dao;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -55,4 +57,24 @@ public class MedicalRecordDaoImpl implements IMedicalRecordDao {
 		return birthdate;  
 	}
 
+	public boolean createMedicalRecord(@Valid MedicalRecord medicalRecord) {
+		dataRepository.database.getMedicalrecords().add(medicalRecord);
+		dataRepository.commit();
+		return true;
+	}
+	
+	public boolean deleteMedicalRecord(@Valid MedicalRecord medicalRecord) {
+		boolean result = dataRepository.database.getMedicalrecords().remove(medicalRecord);
+		dataRepository.commit();
+		return result;
+	}
+	
+	public boolean updateMedicalRecord(@Valid MedicalRecord medicalRecord) {
+		boolean result = deleteMedicalRecord(medicalRecord);
+		if(result) {
+			result = createMedicalRecord(medicalRecord);
+			dataRepository.commit();
+		}
+		return result;
+	}
 }

@@ -3,6 +3,8 @@ package com.safetynet.api.dao;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -54,5 +56,16 @@ public class FirestationDaoImpl implements IFirestationDao {
 		}
 		return stationNumber;
 	}
+
+	public boolean createFirestation(@Valid Firestation firestation) {
+		boolean result = dataRepository.database.getFirestations().add(firestation);
+		dataRepository.commit();
+		return result;
+	}
+	
+	//delete
+	
+	//update
+	
 
 }
