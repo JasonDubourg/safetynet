@@ -23,44 +23,45 @@ import com.safetynet.api.service.PersonService;
 
 @RestController
 public class PersonController {
-	
+
 	@Autowired
-	PersonService personService; 
-	
+	PersonService personService;
+
 	@Autowired
-	MedicalRecordService medicalRecordService; 
-	
-	@GetMapping(value="/childAlert")
+	MedicalRecordService medicalRecordService;
+
+	@GetMapping(value = "/childAlert")
 	@ResponseStatus(HttpStatus.OK)
 	public ChildAndParentsByAddress getChildAndFamilyByAddress(@RequestParam("address") String address) {
-		return personService.getChildAndFamilyMembersByAddress(address); 
+		return personService.getChildAndFamilyMembersByAddress(address);
 	}
-	
-	@GetMapping(value="/personInfo")
+
+	@GetMapping(value = "/personInfo")
 	@ResponseStatus(HttpStatus.OK)
-	public List <PersonInfo> getPersonInfo(@RequestParam(required = false) String firstName, @RequestParam("lastName") String lastName ) {
-		return personService.getPersonInfo(firstName, lastName); 
+	public List<PersonInfo> getPersonInfo(@RequestParam(required = false) String firstName,
+			@RequestParam("lastName") String lastName) {
+		return personService.getPersonInfo(firstName, lastName);
 	}
-	
-	@GetMapping(value="/communityEmail")
+
+	@GetMapping(value = "/communityEmail")
 	@ResponseStatus(HttpStatus.OK)
-	public List <String> getPersonEmailByCity(@RequestParam("city") String city) {
-		return personService.getPersonEmailByCity(city); 
+	public List<String> getPersonEmailByCity(@RequestParam("city") String city) {
+		return personService.getPersonEmailByCity(city);
 	}
-	
-	@PostMapping(value="/person")
+
+	@PostMapping(value = "/person")
 	@ResponseStatus(HttpStatus.CREATED)
 	public void createPerson(@RequestBody @Valid Person person) {
-		 personService.createPerson(person);
+		personService.createPerson(person);
 	}
-	
-	@PutMapping(value="/person")
+
+	@PutMapping(value = "/person")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void updatePerson(@RequestBody @Valid Person person) {
-	
+		personService.updatePerson(person);
 	}
-	
-	@DeleteMapping (value="/person")
+
+	@DeleteMapping(value = "/person")
 	@ResponseStatus(HttpStatus.RESET_CONTENT)
 	public void deletePerson(@RequestBody @Valid Person person) {
 		personService.deletePerson(person);

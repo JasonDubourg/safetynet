@@ -12,9 +12,9 @@ import com.safetynet.api.model.Firestation;
 
 @Repository
 public class FirestationDaoImpl implements IFirestationDao {
-	
+
 	@Autowired
-	DataRepository dataRepository; 
+	DataRepository dataRepository;
 
 	@Override
 	public List<Firestation> findAll() {
@@ -22,35 +22,35 @@ public class FirestationDaoImpl implements IFirestationDao {
 	}
 
 	@Override
-	public List<String> findFirestationByNumberStation(String station) {	
-		List<String> firestationsAddress = new ArrayList<String>(); 
+	public List<String> findFirestationByNumberStation(String station) {
+		List<String> firestationsAddress = new ArrayList<String>();
 		List<Firestation> firestations = dataRepository.database.getFirestations();
 		for (Firestation firestation : firestations) {
-			if(station.equals(firestation.getStation())) {
-				firestationsAddress.add(firestation.getAddress()); 
+			if (station.equals(firestation.getStation())) {
+				firestationsAddress.add(firestation.getAddress());
 			}
-		} 
-		return firestationsAddress; 
+		}
+		return firestationsAddress;
 	}
-	
+
 	@Override
-	public List<Firestation> findFirestationByStation(String station) {	
-		List<Firestation> firestations = new ArrayList<>(); 
+	public List<Firestation> findFirestationByStation(String station) {
+		List<Firestation> firestations = new ArrayList<>();
 		List<Firestation> firestationsRepo = dataRepository.database.getFirestations();
 		for (Firestation firestation : firestationsRepo) {
-			if(station.equals(firestation.getStation())) {
-				firestations.add(firestation); 
+			if (station.equals(firestation.getStation())) {
+				firestations.add(firestation);
 			}
-		} 
-		return firestations; 
+		}
+		return firestations;
 	}
 
 	@Override
 	public List<String> findFirestationNumberbyAddress(String address) {
-		List <String> stationNumber = new ArrayList<String>();
+		List<String> stationNumber = new ArrayList<String>();
 		List<Firestation> firestations = dataRepository.database.getFirestations();
 		for (Firestation firestation : firestations) {
-			if(address.equalsIgnoreCase(firestation.getAddress())) {
+			if (address.equalsIgnoreCase(firestation.getAddress())) {
 				stationNumber.add(firestation.getStation());
 			}
 		}
@@ -62,10 +62,22 @@ public class FirestationDaoImpl implements IFirestationDao {
 		dataRepository.commit();
 		return result;
 	}
-	
-	//delete
-	
-	//update
-	
+
+	// update
+	public boolean updateFirestation(@Valid Firestation firestation) {
+		boolean result = deleteFirestation(firestation);
+		if (result) {
+			result = createFirestation(firestation);
+			dataRepository.commit();
+		}
+		return result;
+	}
+
+	// delete
+	public boolean deleteFirestation(@Valid Firestation firestation) {
+		boolean result = dataRepository.database.getFirestations().remove(firestation);
+		dataRepository.commit();
+		return result;
+	}
 
 }
