@@ -17,6 +17,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.fasterxml.jackson.databind.node.TextNode;
 import com.safetynet.api.exceptions.DataAlreadyExistException;
+import com.safetynet.api.exceptions.DataNotFoundException;
 import com.safetynet.api.service.MedicalRecordService;
 
 @SpringBootTest
@@ -81,5 +82,52 @@ public class MedicalRecordControllerTest {
 		// Then
 		mockMvc.perform(MockMvcRequestBuilders.post("/medicalRecord").contentType(MediaType.APPLICATION_JSON)
 				.content(jsonPerson.toString())).andExpect(MockMvcResultMatchers.status().isConflict());
+	}
+
+	@Test
+	void updateMedicalrecordValid() throws Exception {
+		ObjectMapper obm = new ObjectMapper();
+		ObjectNode jsonMedicalrecord = obm.createObjectNode();
+
+		// GIVEN
+		jsonMedicalrecord.set("firstName", TextNode.valueOf("John"));
+		jsonMedicalrecord.set("lastName", TextNode.valueOf("Boyd"));
+		jsonMedicalrecord.set("birthdate", TextNode.valueOf(birthdateTest));
+
+		// WHEN
+		// THEN
+		mockMvc.perform(MockMvcRequestBuilders.put("/Medicalrecord").contentType(MediaType.APPLICATION_JSON)
+				.content(jsonMedicalrecord.toString())).andExpect(MockMvcResultMatchers.status().isNotFound());
+	}
+
+	@Test
+	void updateMedicalrecordInvalid() throws Exception {
+		ObjectMapper obm = new ObjectMapper();
+		ObjectNode jsonMedicalrecord = obm.createObjectNode();
+
+		// GIVEN
+		jsonMedicalrecord.set("firstName", TextNode.valueOf(""));
+		jsonMedicalrecord.set("lastName", TextNode.valueOf(""));
+
+		// WHEN
+		// THEN
+		mockMvc.perform(MockMvcRequestBuilders.put("/Medicalrecord").contentType(MediaType.APPLICATION_JSON)
+				.content(jsonMedicalrecord.toString())).andExpect(MockMvcResultMatchers.status().isNotFound());
+	}
+
+	@Test
+	void updateMedicalrecordWhenMedicalrecordNotFound() throws Exception {
+		Mockito.doThrow(DataNotFoundException.class).when(medicalRecordService).updateMedicalRecord(Mockito.any());
+		ObjectMapper obm = new ObjectMapper();
+		ObjectNode jsonMedicalrecord = obm.createObjectNode();
+
+		// GIVEN
+		jsonMedicalrecord.set("firstName", TextNode.valueOf(firstNameTest));
+		jsonMedicalrecord.set("lastName", TextNode.valueOf(lastNameTest));
+
+		// WHEN
+		// THEN
+		mockMvc.perform(MockMvcRequestBuilders.put("/Medicalrecord").contentType(MediaType.APPLICATION_JSON)
+				.content(jsonMedicalrecord.toString())).andExpect(MockMvcResultMatchers.status().isNotFound());
 	}
 }

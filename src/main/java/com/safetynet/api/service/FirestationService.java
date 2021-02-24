@@ -129,19 +129,24 @@ public class FirestationService {
 			firestationDaoImpl.createFirestation(firestation);
 			return true;
 		} else {
-			throw new DataAlreadyExistException("La station" + firestation.toString() + " existe déjà");
+			throw new DataAlreadyExistException("existe déja");
 		}
 	}
 
-	public void updateFirestation(@Valid Firestation firestation) {
-		if (!firestationDaoImpl.updateFirestation(firestation)) {
-			throw new DataNotFoundException("La station numéro " + firestation.getStation() + " n'existe pas.");
+	public boolean updateFirestation(@Valid Firestation firestation) {
+		if (firestationDaoImpl.findAll().contains(firestation)) {
+			firestationDaoImpl.updateFirestation(firestation);
+			return true;
+		} else {
+			throw new DataNotFoundException("n'existe pas.");
 		}
 	}
 
-	public void deleteFirestation(@Valid Firestation firestation) {
-		if (!firestationDaoImpl.deleteFirestation(firestation)) {
-			throw new DataNotFoundException("La station numéro " + firestation.getStation() + " n'est pas enregistré.");
+	public boolean deleteFirestation(@Valid Firestation firestation) {
+		if (firestationDaoImpl.updateFirestation(firestation)) {
+			return true;
+		} else {
+			throw new DataNotFoundException("pas enregistré.");
 		}
 	}
 }

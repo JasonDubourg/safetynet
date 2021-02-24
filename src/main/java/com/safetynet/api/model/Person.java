@@ -4,17 +4,29 @@ import javax.validation.constraints.NotBlank;
 
 public class Person {
 	@NotBlank
-	private String firstName; 
+	private String firstName;
 	@NotBlank
-	private String lastName; 
-	private String address; 
-	private String city; 
-	private String phone; 
+	private String lastName;
+	private String address;
+	private String city;
+	private String phone;
 	private String email;
-	private String zip; 
-	
+	private String zip;
+
 	public Person() {
 		super();
+	}
+
+	public Person(String firstName, String lastName, String address, String city, String zip, String phone,
+			String email) {
+		super();
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.address = address;
+		this.city = city;
+		this.zip = zip;
+		this.phone = phone;
+		this.email = email;
 	}
 
 	public String getFirstName() {
@@ -40,7 +52,7 @@ public class Person {
 	public void setAddress(String address) {
 		this.address = address;
 	}
-	
+
 	public String getCity() {
 		return city;
 	}
@@ -63,8 +75,8 @@ public class Person {
 
 	public void setEmail(String email) {
 		this.email = email;
-	} 
-	
+	}
+
 	public String getZip() {
 		return zip;
 	}
@@ -103,5 +115,5 @@ public class Person {
 			return false;
 		return true;
 	}
-	
+
 }

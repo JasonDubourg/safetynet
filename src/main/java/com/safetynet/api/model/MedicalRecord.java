@@ -8,15 +8,24 @@ import javax.validation.constraints.NotBlank;
 public class MedicalRecord {
 
 	@NotBlank
-	private String firstName; 
+	private String firstName;
 	@NotBlank
-	private String lastName; 
-	private String birthdate; 
-	private List<String> medications = new ArrayList<String>(); 
+	private String lastName;
+	private String birthdate;
+	private List<String> medications = new ArrayList<String>();
 	private List<String> allergies = new ArrayList<String>();
-	
+
 	public MedicalRecord() {
 		super();
+	}
+
+	public MedicalRecord(@NotBlank String firstName, @NotBlank String lastName, String birthdate,
+			List<String> medications, List<String> allergies) {
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.birthdate = birthdate;
+		this.medications = medications;
+		this.allergies = allergies;
 	}
 
 	public String getFirstName() {
@@ -89,5 +98,5 @@ public class MedicalRecord {
 			return false;
 		return true;
 	}
-	
+
 }

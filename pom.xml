@@ -149,6 +149,11 @@
 			<plugin>
 				<groupId>org.jacoco</groupId>
 				<artifactId>jacoco-maven-plugin</artifactId>
+				<configuration>
+				    <exclude>com/safetynet/safetyalerts/api/dto/**</exclude>
+				    <exclude>com/safetynet/safetyalerts/api/model/**</exclude>
+				    <exclude>com/safetynet/safetyalerts/api/util/**</exclude>
+				</configuration>
 				<reportSets>
 					<reportSet>
 						<reports>
@@ -342,9 +347,10 @@
 							<dataFile>${project.build.directory}/jacoco-merged.exec</dataFile>
 							<outputDirectory>${project.reporting.outputDirectory}/jacoco-merged</outputDirectory>
 							<excludes>
-								<exclude>*com/safetynet/safetyalerts/dto/**/*</exclude>
-								<exclude>*com/safetynet/safetyalerts/model/**/*</exclude>
-								<exclude>*com/safetynet/safetyalerts/config/**/*</exclude>
+								<exclude>com/safetynet/api/dto/**/*</exclude>
+								<exclude>com/safetynet/api/model/**/*</exclude>
+								<exclude>com/safetynet/api/util/**/*</exclude>
+								<exclude>com/safetynet/api/config/**/*</exclude>
 							</excludes>
 						</configuration>
 					</execution>

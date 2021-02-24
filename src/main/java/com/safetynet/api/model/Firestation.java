@@ -4,12 +4,18 @@ import javax.validation.constraints.NotBlank;
 
 public class Firestation {
 	@NotBlank
-	String address; 
+	String address;
 	@NotBlank
 	String station;
-	
+
 	public Firestation() {
 		super();
+	}
+
+	public Firestation(String address, String station) {
+		this.address = address;
+		this.station = station;
+
 	}
 
 	public String getAddress() {
@@ -57,6 +63,6 @@ public class Firestation {
 		} else if (!station.equals(other.station))
 			return false;
 		return true;
-	} 
-	
+	}
+
 }

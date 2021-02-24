@@ -109,4 +109,9 @@ public class PersonDaoImpl implements IPersonDao {
 		return isMinor;
 	}
 
+	public Object listPerson() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }
