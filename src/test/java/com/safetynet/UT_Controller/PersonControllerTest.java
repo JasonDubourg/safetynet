@@ -33,6 +33,7 @@ public class PersonControllerTest {
 	@MockBean
 	PersonService personService;
 
+	String firstName = "Pomp";
 	String firstNameTest = "John";
 	String lastNameTest = "Boyd";
 	String addressTest = "1509 Culver St";
@@ -54,21 +55,6 @@ public class PersonControllerTest {
 		// Then
 		mockMvc.perform(MockMvcRequestBuilders.post("/person").contentType(MediaType.APPLICATION_JSON)
 				.content(jsonPerson.toString())).andExpect(MockMvcResultMatchers.status().isCreated());
-	}
-
-	@Test
-	public void createPersonInvalid() throws Exception {
-		// Given
-		ObjectMapper obm = new ObjectMapper();
-		ObjectNode jsonPerson = obm.createObjectNode();
-		jsonPerson.set("firstName", TextNode.valueOf(firstNameTest));
-		jsonPerson.set("lastName", TextNode.valueOf(""));
-
-		// When
-
-		// Then
-		mockMvc.perform(MockMvcRequestBuilders.post("/person").contentType(MediaType.APPLICATION_JSON)
-				.content(jsonPerson.toString())).andExpect(MockMvcResultMatchers.status().isBadRequest());
 	}
 
 	@Test

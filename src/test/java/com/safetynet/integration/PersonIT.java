@@ -2,7 +2,6 @@ package com.safetynet.integration;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import org.apache.bcel.util.ClassLoader;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,6 +40,7 @@ public class PersonIT {
 		// On envoie une requête GET avec en paramètre la ville Culver
 		// + on vérifie que le statut de la réponse est 200
 		ResponseEntity<String> response = clientRest.getForEntity("/communityEmail?city=Culver", String.class);
+		System.out.println(response);
 		// on vérifie le code retour 200
 		assertEquals(HttpStatus.OK, response.getStatusCode());
 		// renvoie un jsonnode qu'on attend
