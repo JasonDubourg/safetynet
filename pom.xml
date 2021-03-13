@@ -57,7 +57,10 @@
                 </exclusion>
 			</exclusions>
 		</dependency>
-
+		<dependency>
+	    	<groupId>org.springframework.boot</groupId>
+	    	<artifactId>spring-boot-starter-aop</artifactId>
+		</dependency>
 		<dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
@@ -152,8 +155,10 @@
 				<configuration>
 				<excludes>
 					<exclude>com/safetynet/api/dto/**/*</exclude>
+					<exclude>com/safetynet/api/dao/**/*</exclude>
 				    <exclude>com/safetynet/api/model/**/*</exclude>
 				    <exclude>com/safetynet/api/util/**/*</exclude>
+				    <exclude>com/safetynet/*</exclude>
 				</excludes>
 				</configuration>
 				<reportSets>
@@ -233,6 +238,7 @@
 					<excludes>
 						 <exclude>**/*IT.java</exclude> 	
 						<exclude>*com/safetynet/api/dto/**/*</exclude>
+						<exclude>*com/safetynet/api/dao/**/*</exclude>
 					</excludes>
 					</configuration>
 			</plugin>
@@ -318,7 +324,7 @@
 							<outputDirectory>${project.reporting.outputDirectory}/jacoco-it</outputDirectory>
 						</configuration>
 					</execution>
-					<!-- Merce UT et IT -->
+					<!-- Merge UT et IT -->
 					<execution>
 						<id>merge-unit-and-integration</id>
 						<phase>post-integration-test</phase>
@@ -347,10 +353,13 @@
 							<title>${project.name} : Fusion tests unitaires et d'intégration</title>
 							<dataFile>${project.build.directory}/jacoco-merged.exec</dataFile>
 							<outputDirectory>${project.reporting.outputDirectory}/jacoco-merged</outputDirectory>
-							<excludes>
-								<exclude>*com/safetynet/api/dto/**/*</exclude>
-				   				<exclude>*com/safetynet/api/model/**/*</exclude>
-				   				<exclude>*com/safetynet/api/util/**/*</exclude>
+							<excludes	>
+								<exclude>com/safetynet/api/dto/**/*</exclude>
+								<exclude>com/safetynet/api/dao/**/*</exclude>
+								<exclude>com/safetynet/api/exceptions/**/*</exclude>
+								<exclude>com/safetynet/api/model/**/*</exclude>
+								<exclude>com/safetynet/api/util/**/*</exclude>
+								<exclude>com/safetynet/*</exclude>
 							</excludes>
 						</configuration>
 					</execution>

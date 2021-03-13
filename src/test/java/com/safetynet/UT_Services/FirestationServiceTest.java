@@ -1,9 +1,12 @@
 package com.safetynet.UT_Services;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.verify;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -16,9 +19,11 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import com.safetynet.api.dao.FirestationDaoImpl;
+import com.safetynet.api.dao.PersonDaoImpl;
 import com.safetynet.api.exceptions.DataAlreadyExistException;
 import com.safetynet.api.exceptions.DataNotFoundException;
 import com.safetynet.api.model.Firestation;
+import com.safetynet.api.model.Person;
 import com.safetynet.api.service.FirestationService;
 
 @AutoConfigureMockMvc
@@ -29,13 +34,21 @@ public class FirestationServiceTest {
 	@MockBean
 	FirestationDaoImpl firestationDaoImpl;
 
+	@MockBean
+	PersonDaoImpl personDaoImpl;
+
 	@Autowired
 	FirestationService firestationService;
 
 	Firestation firestation1 = new Firestation("WhiteHouse", "1");
-	Firestation firestation2 = new Firestation("BlackHouse", "2");
+	Firestation firestation2 = new Firestation("BlackHouse", "1");
 	Firestation firestationValid = new Firestation("29 15th St", "2");
 	Firestation firestationVide = new Firestation("", "");
+
+	String addressTest = "Chemin Burgos";
+
+	Person personTest1 = new Person("Jason", "Dubourg", "Chemin Burgos", "Bordeaux", "33140", "888", "j@d");
+	Person personTest2 = new Person("Tim", "Dubourg", "Chemin Burgos", "Bordeaux", "33140", "444", "t@d");
 
 	@Test
 	public void createExistingFirestationTest() throws Exception {
@@ -98,4 +111,31 @@ public class FirestationServiceTest {
 		}
 	}
 
+	@Test
+	public void getFireStationCoveragePerson() throws Exception {
+		// GIVEN
+		List<Firestation> listFireStationAddressTest = Arrays.asList(firestation1, firestation2);
+		// WHEN
+		Mockito.when(firestationDaoImpl.findFirestationByStation(firestation1.getStation()))
+				.thenReturn(listFireStationAddressTest);
+		List<String> stationsStr = listFireStationAddressTest.stream().map(firestation -> firestation.getStation())
+				.collect(Collectors.toList());
+		// THEN
+		assertThat(firestationService.getFirestationCoveragePerson(stationsStr).size()).isEqualTo(4);
+	}
+
+	@Test
+	public void getListPersonsAndNumberFirestationByAddress() throws Exception {
+		// GIVEN
+		List<String> listFireStationAddressTest = Arrays.asList(firestation1.getStation(), firestation2.getAddress());
+
+		// WHEN
+		Mockito.when(firestationDaoImpl.findFirestationNumberbyAddress(addressTest))
+				.thenReturn(listFireStationAddressTest);
+
+		// THEN
+		assertThat(firestationService.getListPersonsAndNumberFirestationByAddress(addressTest)
+				.equals(listFireStationAddressTest));
+
+	}
 }

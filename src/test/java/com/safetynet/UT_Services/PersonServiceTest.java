@@ -62,7 +62,7 @@ public class PersonServiceTest {
 		Mockito.when(personDaoImpl.findAll()).thenReturn(listPerson);
 
 		// THEN
-		// On crée un personne qui existe
+		// On crée une personne qui existe
 		try {
 			Assertions.assertThat(personServiceTest.createPerson(personBoyd));
 			verify(personDaoImpl, Mockito.times(0)).createPerson(personBoyd);

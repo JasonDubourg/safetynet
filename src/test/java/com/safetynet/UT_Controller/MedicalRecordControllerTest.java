@@ -1,5 +1,9 @@
 package com.safetynet.UT_Controller;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
@@ -16,9 +20,8 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.fasterxml.jackson.databind.node.TextNode;
-import com.safetynet.api.exceptions.DataAlreadyExistException;
+import com.safetynet.api.dao.MedicalRecordDaoImpl;
 import com.safetynet.api.exceptions.DataNotFoundException;
-import com.safetynet.api.service.MedicalRecordService;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -26,108 +29,123 @@ import com.safetynet.api.service.MedicalRecordService;
 public class MedicalRecordControllerTest {
 
 	@Autowired
+	// MockMvc est un module de SpringTest permettant de simplifier la création de
+	// tests Rest
 	MockMvc mockMvc;
 
 	@MockBean
-	MedicalRecordService medicalRecordService;
+	MedicalRecordDaoImpl medicalrecordDao;
 
-	String firstNameTest = "Paul";
-	String lastNameTest = "Lefevre";
-	String birthdateTest = "12/03/1988";
+	String firstnameTest = "Marc";
+	String lastnameTest = "Dupont";
+	String birthdate = "12/06/1975";
+	List<String> medications = new ArrayList<String>(Arrays.asList("aznol:350mg", "hydrapermazol:100mg"));
+	List<String> allergies = new ArrayList<String>(Arrays.asList("nillacilan", "hydrapermazol:100mg"));
 
+	// Création des Medicalrecord
 	@Test
-	public void createMedicalRecord() throws Exception {
-		// Given
-		ObjectMapper obm = new ObjectMapper();
-		ObjectNode jsonPerson = obm.createObjectNode();
-		jsonPerson.set("firstName", TextNode.valueOf(firstNameTest));
-		jsonPerson.set("lastName", TextNode.valueOf(lastNameTest));
-		jsonPerson.set("birthdate", TextNode.valueOf(birthdateTest));
-
-		// When
-
-		// Then
-		mockMvc.perform(MockMvcRequestBuilders.post("/medicalRecord").contentType(MediaType.APPLICATION_JSON)
-				.content(jsonPerson.toString())).andExpect(MockMvcResultMatchers.status().isCreated());
-	}
-
-	@Test
-	public void createMedicalRecordInvalid() throws Exception {
-		// Given
-		ObjectMapper obm = new ObjectMapper();
-		ObjectNode jsonPerson = obm.createObjectNode();
-		jsonPerson.set("firstName", TextNode.valueOf(firstNameTest));
-		jsonPerson.set("lastName", TextNode.valueOf(""));
-		jsonPerson.set("birthdate", TextNode.valueOf(birthdateTest));
-
-		// When
-
-		// Then
-		mockMvc.perform(MockMvcRequestBuilders.post("/medicalRecord").contentType(MediaType.APPLICATION_JSON)
-				.content(jsonPerson.toString())).andExpect(MockMvcResultMatchers.status().isBadRequest());
-	}
-
-	@Test
-	public void createMedicalRecordWhenMedicalRecordAlreadyExist() throws Exception {
-		// Given
-		Mockito.doThrow(DataAlreadyExistException.class).when(medicalRecordService).createMedicalRecord(Mockito.any());
-		ObjectMapper obm = new ObjectMapper();
-		ObjectNode jsonPerson = obm.createObjectNode();
-		jsonPerson.set("firstName", TextNode.valueOf(firstNameTest));
-		jsonPerson.set("lastName", TextNode.valueOf(lastNameTest));
-		jsonPerson.set("birthdate", TextNode.valueOf(birthdateTest));
-
-		// When
-
-		// Then
-		mockMvc.perform(MockMvcRequestBuilders.post("/medicalRecord").contentType(MediaType.APPLICATION_JSON)
-				.content(jsonPerson.toString())).andExpect(MockMvcResultMatchers.status().isConflict());
-	}
-
-	@Test
-	void updateMedicalrecordValid() throws Exception {
-		ObjectMapper obm = new ObjectMapper();
-		ObjectNode jsonMedicalrecord = obm.createObjectNode();
-
+	void createMedicalrecordValid() throws Exception {
 		// GIVEN
-		jsonMedicalrecord.set("firstName", TextNode.valueOf("John"));
-		jsonMedicalrecord.set("lastName", TextNode.valueOf("Boyd"));
-		jsonMedicalrecord.set("birthdate", TextNode.valueOf(birthdateTest));
+		ObjectMapper obm = new ObjectMapper();
+		ObjectNode jsonMedicalrecord = obm.createObjectNode(); // on prépare le Json vide
+		jsonMedicalrecord.set("firstName", TextNode.valueOf(firstnameTest));
+		jsonMedicalrecord.set("lastName", TextNode.valueOf(lastnameTest));
+		jsonMedicalrecord.set("birthdate", TextNode.valueOf(birthdate));
 
 		// WHEN
+
 		// THEN
-		mockMvc.perform(MockMvcRequestBuilders.put("/Medicalrecord").contentType(MediaType.APPLICATION_JSON)
-				.content(jsonMedicalrecord.toString())).andExpect(MockMvcResultMatchers.status().isNotFound());
+		mockMvc.perform(MockMvcRequestBuilders.post("/medicalRecord").contentType(MediaType.APPLICATION_JSON)
+				.content(jsonMedicalrecord.toString())).andExpect(MockMvcResultMatchers.status().isCreated());
+
+	}
+
+	@Test
+	void createMedicalrecordInvalid() throws Exception {
+		// GIVEN
+		ObjectMapper obm = new ObjectMapper();
+		ObjectNode jsonMedicalrecord = obm.createObjectNode(); // on prépare le Json vide
+		jsonMedicalrecord.set("firstName", TextNode.valueOf(firstnameTest));
+		jsonMedicalrecord.set("lastName", TextNode.valueOf(""));
+		jsonMedicalrecord.set("birthdate", TextNode.valueOf(birthdate));
+
+		// WHEN
+
+		// THEN
+		mockMvc.perform(MockMvcRequestBuilders.post("/medicalRecord").contentType(MediaType.APPLICATION_JSON)
+				.content(jsonMedicalrecord.toString())).andExpect(MockMvcResultMatchers.status().isBadRequest());
 	}
 
 	@Test
 	void updateMedicalrecordInvalid() throws Exception {
-		ObjectMapper obm = new ObjectMapper();
-		ObjectNode jsonMedicalrecord = obm.createObjectNode();
-
 		// GIVEN
-		jsonMedicalrecord.set("firstName", TextNode.valueOf(""));
+		ObjectMapper obm = new ObjectMapper();
+		ObjectNode jsonMedicalrecord = obm.createObjectNode(); // on prépare le Json vide
+		jsonMedicalrecord.set("firstName", TextNode.valueOf(firstnameTest));
 		jsonMedicalrecord.set("lastName", TextNode.valueOf(""));
+		jsonMedicalrecord.set("birthdate", TextNode.valueOf(birthdate));
 
 		// WHEN
+
 		// THEN
-		mockMvc.perform(MockMvcRequestBuilders.put("/Medicalrecord").contentType(MediaType.APPLICATION_JSON)
-				.content(jsonMedicalrecord.toString())).andExpect(MockMvcResultMatchers.status().isNotFound());
+		mockMvc.perform(MockMvcRequestBuilders.put("/medicalRecord").contentType(MediaType.APPLICATION_JSON)
+				.content(jsonMedicalrecord.toString())).andExpect(MockMvcResultMatchers.status().isBadRequest());
 	}
 
 	@Test
-	void updateMedicalrecordWhenMedicalrecordNotFound() throws Exception {
-		Mockito.doThrow(DataNotFoundException.class).when(medicalRecordService).updateMedicalRecord(Mockito.any());
-		ObjectMapper obm = new ObjectMapper();
-		ObjectNode jsonMedicalrecord = obm.createObjectNode();
-
+	void updateMedicalrecordWhenMedicalrecordNotExist() throws Exception {
 		// GIVEN
-		jsonMedicalrecord.set("firstName", TextNode.valueOf(firstNameTest));
-		jsonMedicalrecord.set("lastName", TextNode.valueOf(lastNameTest));
+		// On courtcircuite l'appel de l'exeption (le fichier Json utilisé en mémoire
+		// est vide)
+		Mockito.doThrow(DataNotFoundException.class).when(medicalrecordDao).updateMedicalRecord(Mockito.any());
+
+		ObjectMapper obm = new ObjectMapper();
+		ObjectNode jsonMedicalrecord = obm.createObjectNode(); // on prépare le Json vide
+		jsonMedicalrecord.set("firstName", TextNode.valueOf(firstnameTest));
+		jsonMedicalrecord.set("lastName", TextNode.valueOf(lastnameTest));
+		jsonMedicalrecord.set("birthdate", TextNode.valueOf(birthdate));
 
 		// WHEN
+
 		// THEN
-		mockMvc.perform(MockMvcRequestBuilders.put("/Medicalrecord").contentType(MediaType.APPLICATION_JSON)
+		mockMvc.perform(MockMvcRequestBuilders.put("/medicalRecord").contentType(MediaType.APPLICATION_JSON)
 				.content(jsonMedicalrecord.toString())).andExpect(MockMvcResultMatchers.status().isNotFound());
+
+	}
+
+	@Test
+	void deleteMedicalrecordInvalid() throws Exception {
+		// GIVEN
+		ObjectMapper obm = new ObjectMapper();
+		ObjectNode jsonMedicalrecord = obm.createObjectNode(); // on prépare le Json vide
+		jsonMedicalrecord.set("firstName", TextNode.valueOf(firstnameTest));
+		jsonMedicalrecord.set("lastName", TextNode.valueOf(""));
+		jsonMedicalrecord.set("birthdate", TextNode.valueOf(birthdate));
+
+		// WHEN
+
+		// THEN
+		mockMvc.perform(MockMvcRequestBuilders.delete("/medicalRecord").contentType(MediaType.APPLICATION_JSON)
+				.content(jsonMedicalrecord.toString())).andExpect(MockMvcResultMatchers.status().isBadRequest());
+	}
+
+	@Test
+	void deleteMedicalrecordWhenvNotExist() throws Exception {
+		// GIVEN
+		// On courrtcircuite l'appel de l'exeption
+		Mockito.doThrow(DataNotFoundException.class).when(medicalrecordDao).deleteMedicalRecord((Mockito.any()));
+
+		ObjectMapper obm = new ObjectMapper();
+		ObjectNode jsonMedicalrecord = obm.createObjectNode(); // on prépare le Json vide
+		jsonMedicalrecord.set("firstName", TextNode.valueOf(firstnameTest));
+		jsonMedicalrecord.set("lastName", TextNode.valueOf(lastnameTest));
+		jsonMedicalrecord.set("birthdate", TextNode.valueOf(birthdate));
+
+		// WHEN
+
+		// THEN
+		mockMvc.perform(MockMvcRequestBuilders.delete("/medicalRecord").contentType(MediaType.APPLICATION_JSON)
+				.content(jsonMedicalrecord.toString())).andExpect(MockMvcResultMatchers.status().isNotFound());
+
 	}
 }

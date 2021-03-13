@@ -44,6 +44,7 @@ public class PersonIT {
 		// on vérifie le code retour 200
 		assertEquals(HttpStatus.OK, response.getStatusCode());
 		// renvoie un jsonnode qu'on attend
+		System.out.println(ClassLoader.getSystemResourceAsStream("culvercommunityEmail.json"));
 		JsonNode expectedJson = objectMapper
 				.readTree(ClassLoader.getSystemResourceAsStream("culvercommunityEmail.json"));
 		// on vérifie le contenu

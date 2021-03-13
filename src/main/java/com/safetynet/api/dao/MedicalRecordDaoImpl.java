@@ -12,9 +12,9 @@ import com.safetynet.api.model.MedicalRecord;
 
 @Repository
 public class MedicalRecordDaoImpl implements IMedicalRecordDao {
-	
+
 	@Autowired
-	private DataRepository dataRepository; 
+	private DataRepository dataRepository;
 
 	@Override
 	public List<MedicalRecord> findAll() {
@@ -23,38 +23,41 @@ public class MedicalRecordDaoImpl implements IMedicalRecordDao {
 
 	@Override
 	public List<String> findAllergiesByName(String firstName, String lastName) {
-		List<String>allergies = new ArrayList<String>(); 
+		List<String> allergies = new ArrayList<String>();
 		List<MedicalRecord> medicalRecordList = dataRepository.database.getMedicalrecords();
 		for (MedicalRecord medicalRecord : medicalRecordList) {
-				if((firstName == null || medicalRecord.getFirstName().equalsIgnoreCase(firstName)) && (lastName == null || medicalRecord.getLastName().equalsIgnoreCase(lastName))) { 
-					allergies.addAll(medicalRecord.getAllergies());
+			if ((firstName == null || medicalRecord.getFirstName().equalsIgnoreCase(firstName))
+					&& (lastName == null || medicalRecord.getLastName().equalsIgnoreCase(lastName))) {
+				allergies.addAll(medicalRecord.getAllergies());
 			}
 		}
-		return allergies;  
+		return allergies;
 	}
-	
+
 	@Override
 	public List<String> findMedicationsByName(String firstName, String lastName) {
-		List<String>medications = new ArrayList<String>(); 
+		List<String> medications = new ArrayList<String>();
 		List<MedicalRecord> medicalRecordList = dataRepository.database.getMedicalrecords();
 		for (MedicalRecord medicalRecord : medicalRecordList) {
-				if((firstName == null || medicalRecord.getFirstName().equalsIgnoreCase(firstName)) && (lastName == null || medicalRecord.getLastName().equalsIgnoreCase(lastName))) { 
-					medications.addAll(medicalRecord.getMedications());
+			if ((firstName == null || medicalRecord.getFirstName().equalsIgnoreCase(firstName))
+					&& (lastName == null || medicalRecord.getLastName().equalsIgnoreCase(lastName))) {
+				medications.addAll(medicalRecord.getMedications());
 			}
 		}
-		return medications;  
+		return medications;
 	}
-	
+
 	@Override
 	public String findBirthdateByName(String firstName, String lastName) {
 		String birthdate = "";
 		List<MedicalRecord> medicalRecordList = dataRepository.database.getMedicalrecords();
 		for (MedicalRecord medicalRecord : medicalRecordList) {
-				if((firstName == null || medicalRecord.getFirstName().equalsIgnoreCase(firstName)) && (lastName == null || medicalRecord.getLastName().equalsIgnoreCase(lastName))) { 
-					birthdate = medicalRecord.getBirthdate();
+			if ((firstName == null || medicalRecord.getFirstName().equalsIgnoreCase(firstName))
+					&& (lastName == null || medicalRecord.getLastName().equalsIgnoreCase(lastName))) {
+				birthdate = medicalRecord.getBirthdate();
 			}
 		}
-		return birthdate;  
+		return birthdate;
 	}
 
 	public boolean createMedicalRecord(@Valid MedicalRecord medicalRecord) {
@@ -62,16 +65,16 @@ public class MedicalRecordDaoImpl implements IMedicalRecordDao {
 		dataRepository.commit();
 		return true;
 	}
-	
+
 	public boolean deleteMedicalRecord(@Valid MedicalRecord medicalRecord) {
 		boolean result = dataRepository.database.getMedicalrecords().remove(medicalRecord);
 		dataRepository.commit();
 		return result;
 	}
-	
+
 	public boolean updateMedicalRecord(@Valid MedicalRecord medicalRecord) {
 		boolean result = deleteMedicalRecord(medicalRecord);
-		if(result) {
+		if (result) {
 			result = createMedicalRecord(medicalRecord);
 			dataRepository.commit();
 		}
