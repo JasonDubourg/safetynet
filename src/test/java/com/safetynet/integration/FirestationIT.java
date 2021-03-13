@@ -49,22 +49,6 @@ public class FirestationIT {
 	}
 
 	@Test
-	void getFireStationListPhone() throws Exception {
-		// On envoie une requête GET avec en paramètre le n° de station
-		// + on vérifie que le statut de la réponse est 200
-		ResponseEntity<String> response = clientRest.getForEntity("/phoneAlert?firestation=1", String.class);
-
-		// on vérifie le code retour 200
-		assertEquals(HttpStatus.OK, response.getStatusCode());
-
-		// renvoie un jsonnode qu'on attend
-		JsonNode expectedJson = objectMapper.readTree(ClassLoader.getSystemResourceAsStream("station1phoneAlert.json"));
-
-		// on vérifie le contenu
-		assertEquals(expectedJson, objectMapper.readTree(response.getBody()));
-	}
-
-	@Test
 	void getFireStationCoveragePerson() throws Exception {
 		// On envoie une requête GET avec en paramètre le n° de station
 		// + on vérifie que le statut de la réponse est 200

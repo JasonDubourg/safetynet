@@ -23,35 +23,37 @@ public class MedicalRecordService {
 	@Autowired
 	PersonDaoImpl personDao;
 
-	public void createMedicalRecord(@Valid MedicalRecord medicalRecord) {
+	public boolean createMedicalRecord(@Valid MedicalRecord medicalRecord) {
 		List<Person> personInfo = personDao.findPersonByName(medicalRecord.getFirstName(), medicalRecord.getLastName());
 		String message = null;
 		if ((!medicalRecordDao.findAll().contains(medicalRecord)) && (personInfo != null) && (!personInfo.isEmpty())) {
 			medicalRecordDao.createMedicalRecord(medicalRecord);
+			return true;
 		} else {
 			if (!medicalRecordDao.findAll().contains(medicalRecord)) {
-				message = "Le dossier médical de " + medicalRecord.getFirstName() + " " + medicalRecord.getLastName()
-						+ " existe déjà.";
+				message = "Le medicalRecord existe";
+				return false;
 			}
 			if ((personInfo != null) || (!personInfo.isEmpty())) {
 				message = "La personne " + medicalRecord.getFirstName() + " " + medicalRecord.getLastName()
 						+ " n'existe pas.";
+				return false;
 			}
 			throw new DataAlreadyExistException(message);
 		}
 	}
 
-	public void updateMedicalRecord(@Valid MedicalRecord medicalRecord) {
+	public boolean updateMedicalRecord(@Valid MedicalRecord medicalRecord) {
 		if (!medicalRecordDao.updateMedicalRecord(medicalRecord)) {
-			throw new DataNotFoundException("La personne " + medicalRecord.getFirstName() + " "
-					+ medicalRecord.getLastName() + " n'existe pas.");
+			throw new DataNotFoundException("n'existe pas");
+		} else {
+			return true;
 		}
 	}
 
 	public void deleteMedicalRecord(@Valid MedicalRecord medicalRecord) {
 		if (!medicalRecordDao.deleteMedicalRecord(medicalRecord)) {
-			throw new DataNotFoundException("La personne " + medicalRecord.getFirstName() + " "
-					+ medicalRecord.getLastName() + " n'a pas de dossier médical.");
+			throw new DataNotFoundException("n'a pas de dossier médical");
 		}
 	}
 
