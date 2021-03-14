@@ -6,6 +6,7 @@ import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.After;
 import org.aspectj.lang.annotation.AfterThrowing;
+import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
@@ -33,19 +34,14 @@ public class RestLogAspect {
 		System.out.println("--- EXCEPTION DETAILS --- Method " + e.getMessage());
 	}
 
+	@Around("allControllerPointCut()")
 	public Object logAroundMethod(ProceedingJoinPoint pjp) throws Throwable {
-		// same with MethodBeforeAdvice
-		System.out.println(" ----Before method avec Around " + pjp.getSignature().getName() + "()");
 		try {
-			// proceed to original method call
 			Object result = pjp.proceed();
-			// same with AfterReturningAdvice
 			System.out.println(" ----After method avec Around " + pjp.getSignature().getName() + "()"
 					+ " avec le resultat " + result);
 			return result;
-
 		} catch (Throwable e) {
-			// same with ThrowsAdvice
 			System.out.println("----AfterThrowing method avec Around  " + pjp.getSignature().getName() + "()"
 					+ ":et leve exception!");
 			throw e;
