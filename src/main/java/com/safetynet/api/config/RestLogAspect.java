@@ -38,8 +38,7 @@ public class RestLogAspect {
 	public Object logAroundMethod(ProceedingJoinPoint pjp) throws Throwable {
 		try {
 			Object result = pjp.proceed();
-			System.out.println(" ----After method avec Around " + pjp.getSignature().getName() + "()"
-					+ " avec le resultat " + result);
+			System.out.println("Resultat " + result);
 			return result;
 		} catch (Throwable e) {
 			System.out.println("----AfterThrowing method avec Around  " + pjp.getSignature().getName() + "()"
