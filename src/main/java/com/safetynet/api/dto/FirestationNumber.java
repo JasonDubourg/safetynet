@@ -13,5 +13,10 @@ public class FirestationNumber {
 	public void setStation(List<String> station) {
 		this.station = station;
 	}
-	
+
+	@Override
+	public String toString() {
+		return "FirestationNumber [station=" + station + "]";
+	}
+
 }

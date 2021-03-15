@@ -116,4 +116,9 @@ public class Person {
 		return true;
 	}
 
+	@Override
+	public String toString() {
+		return "Person [firstName=" + firstName + ", lastName=" + lastName + ", address=" + address + ", city=" + city
+				+ ", phone=" + phone + ", email=" + email + ", zip=" + zip + "]";
+	}
 }
